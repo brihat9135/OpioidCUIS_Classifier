@@ -1,8 +1,10 @@
+import os
 import pandas as pd
+import numpy as np
 import pickle
-from keras.layers import Tokenizer
-
-
+from keras.preprocessing.text import Tokenizer
+from keras.models import load_model
+from keras.preprocessing.sequence import pad_sequences
 
 
 class ProcessData:
@@ -23,13 +25,13 @@ class ProcessData:
             except Exception as e:
                 raise e
                 print("No Files found here!")
-
-         print("Total Files found", count)
-         txtfilesTrain_df = pd.DataFrame({'Filename':patientL, 'FileList':txtfilesList})
-         return txtfilesTrain_df
+         
+        print("Total Files found", count)
+        txtfilesTrain_df = pd.DataFrame({'Filename':patientL, 'FileList':txtfilesList})
+        return txtfilesTrain_df
 
     def openData(self, text_df):
-        print(text_df)
+        #print(text_df)
         text_df['FileList'] = text_df.FileList.apply(lambda x: open(x, "r").read())
         text_df['FileList'] = text_df.FileList.apply(lambda x: ", ".join(x.split( )))
         return text_df
@@ -41,7 +43,7 @@ class ProcessData:
         tokenizer = pickle.load(tokenizer_pkl)
         x_test = text_df.FileList
         sequences_test = tokenizer.texts_to_sequences(x_test)
-        x_test = pad_sequences(sequences_val, maxlen = 35000)
+        x_test = pad_sequences(sequences_test, maxlen = 35000)
         predict_prob = model.predict(np.asarray(x_test), batch_size = 1)
         prediction = []
         predictProb = []
@@ -54,16 +56,17 @@ class ProcessData:
         
         documents = text_df.Filename.tolist()
         prob_df = pd.DataFrame({'Filename': documents, 'Predictions': prediction, 'Prediction_Probability': predictProb})
-        data_df.to_csv(outputDr + 'OpioidResult.csv', sep = '|', index = False)
-        return data_df
+        prob_df.to_csv(outputDir + 'OpioidResult_dir_004.csv', sep = '|', index = False)
+        return prob_df
         
         
 if __name__ == "__main__":
     PD = ProcessData()
     
-    inputDir = "/Archive/"
-    outputDir = "/home/"
-
-    txtfilesTrain_df = PD.dfffiles(inputDir)
+    inputDir = "/Archive-Odin/SubstanceMisuseData/data/dir_004/"
+    outputDir = "~/opioid/Opioid_Encounter/Neural_Network/CUISBased/Opioid_Results_sujay/"
+    tokenizer_loc = "CUIS_tokenizer.pkl"
+    model_loc = "CNN_OpioidCUIS.h5"
+    txtfilesTrain_df = PD.dffiles(inputDir)
     text_df = PD.openData(txtfilesTrain_df)
     data_df = PD.predict(tokenizer_loc, model_loc, text_df, outputDir)
