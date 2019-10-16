@@ -63,8 +63,8 @@ class ProcessData:
 if __name__ == "__main__":
     PD = ProcessData()
     
-    inputDir = "/Archive-Odin/SubstanceMisuseData/data/dir_004/"
-    outputDir = "~/opioid/Opioid_Encounter/Neural_Network/CUISBased/Opioid_Results_sujay/"
+    inputDir = "/SubstanceMisuseData/"
+    outputDir = "~/Opioid_Encounter/Neural_Network/"
     tokenizer_loc = "CUIS_tokenizer.pkl"
     model_loc = "CNN_OpioidCUIS.h5"
     txtfilesTrain_df = PD.dffiles(inputDir)
