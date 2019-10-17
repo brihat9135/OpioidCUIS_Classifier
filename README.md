@@ -4,8 +4,6 @@ Introduction
 
 Opioid classifier to identify opioid misuse from the Electronic Health Record of Emergency Department and Hospitalized Patients. The first 24hr of clinical notes are needed as an input, which should be first processed using Apache cTAKES to concept map the raw with UMLS into Concept Unique Identifiers (CUIs).
 
-Original research article describing development and internal validation: https://www.ncbi.nlm.nih.gov/pubmed/30602031. The classifier was trained against patients that completed the Alcohol Use Disorders Identification Test.
-
 Dependencies Library: Pandas, os, pickle, numpy, keras, tensorflow
 
 Steps:
