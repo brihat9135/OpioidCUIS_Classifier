@@ -20,8 +20,7 @@ class ProcessData:
                     patientL.append(str(file))
                     count = count + 1
                 else:
-                    print("Not a text file")
-
+                    raise Exception("Please check the input file it must be txt files")
             except Exception as e:
                 raise e
                 print("No Files found here!")
@@ -56,15 +55,15 @@ class ProcessData:
         
         documents = text_df.Filename.tolist()
         prob_df = pd.DataFrame({'Filename': documents, 'Predictions': prediction, 'Prediction_Probability': predictProb})
-        prob_df.to_csv(outputDir + 'OpioidResult_dir_004.csv', sep = '|', index = False)
+        prob_df.to_csv(outputDir + 'OpioidResult_dir.csv', sep = '|', index = False)
         return prob_df
         
         
 if __name__ == "__main__":
     PD = ProcessData()
     
-    inputDir = "/SubstanceMisuseData/"
-    outputDir = "~/Opioid_Encounter/Neural_Network/"
+    inputDir = "/Archive-Odin/SubstanceMisuseData/data/dir_001/"
+    outputDir = "~/opioid/"
     tokenizer_loc = "CUIS_tokenizer.pkl"
     model_loc = "CNN_OpioidCUIS.h5"
     txtfilesTrain_df = PD.dffiles(inputDir)
